@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entendendo o feminicídio — Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum-950:#2A1329;
+    --plum-900:#3B1A38;
+    --plum-800:#4E2249;
+    --plum-700:#6B2F60;
+    --mauve:#9C5B85;
+    --paper:#FBF6F4;
+    --paper-dim:#F1E7E4;
+    --ink:#2A1329;
+    --ink-soft:#6B5468;
+    --correct:#2F6B4F;
+    --correct-bg:#E4F1EA;
+    --wrong:#A23B3B;
+    --wrong-bg:#F7E7E4;
+    --ribbon:#7C2D6B;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#F1E7E4;
+      --paper-dim:#E5D6D2;
+    }
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100%;
+    background:radial-gradient(ellipse at top, var(--plum-800), var(--plum-950) 70%);
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding-left:16px;
+    padding-right:16px;
+  }
+  .wrap{
+    width:100%;
+    max-width:620px;
+    padding:40px 0 56px;
+  }
+  .masthead{
+    text-align:center;
+    color:var(--paper);
+    margin-bottom:28px;
+  }
+  .masthead svg{width:34px;height:34px;margin-bottom:10px;}
+  .masthead h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(28px,6vw,38px);
+    line-height:1.15;
+    margin:0 0 8px;
+  }
+  .masthead p{
+    margin:0;
+    font-size:15px;
+    color:#D9C3D2;
+    max-width:44ch;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.5;
+  }
+  .card{
+    background:var(--paper);
+    border-radius:18px;
+    padding:30px 28px 28px;
+    box-shadow:0 24px 60px -20px rgba(20,6,20,0.55);
+  }
+  .status-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+    font-variant-numeric:tabular-nums;
+  }
+  .status-row .score{
+    color:var(--ribbon);
+    font-weight:600;
+  }
+  .track{
+    height:4px;
+    background:var(--paper-dim);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:22px;
+  }
+  .track-fill{
+    height:100%;
+    background:var(--ribbon);
+    border-radius:4px;
+    transition:width .35s ease;
+  }
+  .question{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(19px,3.6vw,23px);
+    line-height:1.35;
+    margin:0 0 22px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .opt{
+    text-align:left;
+    width:100%;
+    border:1.5px solid var(--paper-dim);
+    background:#fff;
+    border-radius:12px;
+    padding:14px 16px;
+    font-family:'Inter',sans-serif;
+    font-size:15.5px;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+    line-height:1.45;
+  }
+  .opt:hover:not(:disabled){
+    border-color:var(--mauve);
+  }
+  .opt:disabled{cursor:default;}
+  .opt.correct{
+    background:var(--correct-bg);
+    border-color:var(--correct);
+    color:#204A38;
+  }
+  .opt.wrong{
+    background:var(--wrong-bg);
+    border-color:var(--wrong);
+    color:#6E2323;
+  }
+  .explain{
+    margin-top:8px;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .explain.correct{background:var(--correct-bg);color:#204A38;}
+  .explain.wrong{background:var(--wrong-bg);color:#6E2323;}
+  .explain strong{display:block;font-size:12.5px;letter-spacing:.02em;margin-bottom:3px;}
+  .next-row{
+    margin-top:24px;
+    display:flex;
+    justify-content:flex-end;
+  }
+  .btn{
+    border:none;
+    background:var(--ribbon);
+    color:#fff;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    padding:11px 22px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .btn:hover{background:#66245A;}
+  .btn:active{transform:scale(.97);}
+  .btn:focus-visible, .opt:focus-visible{outline:2px solid var(--ribbon);outline-offset:2px;}
+  .result{display:none;text-align:center;}
+  .result .big{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:56px;
+    color:var(--ribbon);
+    margin:6px 0 4px;
+  }
+  .result .msg{
+    font-size:16px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    max-width:42ch;
+    margin:0 auto 20px;
+  }
+  .result .note{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    border-top:1px solid var(--paper-dim);
+    padding-top:16px;
+    margin-top:6px;
+    line-height:1.6;
+  }
+  .result .note b{color:var(--ribbon);}
+  .restart-row{margin-top:20px;display:flex;justify-content:center;}
+  @media (prefers-reduced-motion:reduce){
+    .track-fill, .btn{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M12 2C9.5 2 8 4 8 6.2C8 8.6 12 12 12 12C12 12 16 8.6 16 6.2C16 4 14.5 2 12 2Z" stroke="#D9C3D2" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M12 12L7 22" stroke="#D9C3D2" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M12 12L17 22" stroke="#D9C3D2" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <h1>Entendendo o feminicídio</h1>
+    <p>Um quiz sobre o que a lei diz, o que os dados mostram e como o problema pode ser prevenido no Brasil.</p>
+  </div>
+
+  <div class="card">
+    <div id="quizArea">
+      <div class="status-row">
+        <span id="qCounter">Pergunta 1 de 10</span>
+        <span class="score">Acertos: <span id="scoreVal">0</span></span>
+      </div>
+      <div class="track"><div class="track-fill" id="trackFill" style="width:10%"></div></div>
+      <div class="question" id="questionText"></div>
+      <div class="options" id="optionsArea"></div>
+      <div class="next-row">
+        <button class="btn" id="nextBtn" style="display:none">Próxima pergunta</button>
+      </div>
+    </div>
+
+    <div class="result" id="resultArea">
+      <div style="font-size:14px;color:var(--ink-soft)">Você acertou</div>
+      <div class="big" id="finalScore">0/10</div>
+      <div class="msg" id="finalMsg"></div>
+      <div class="restart-row"><button class="btn" id="restartBtn">Refazer o quiz</button></div>
+      <div class="note">Se você ou alguém que você conhece está em situação de violência doméstica, ligue para o <b>Disque 180</b> (Central de Atendimento à Mulher), gratuito e disponível 24h.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "O que é feminicídio?",
+    opts: [
+      { t: "Homicídio cometido contra uma mulher por razões relacionadas ao gênero", c: true, e: "É exatamente essa a definição: matar uma mulher por causa da sua condição de gênero, seja em contexto de violência doméstica, seja por menosprezo ou discriminação contra a mulher." },
+      { t: "Qualquer discussão entre duas pessoas", c: false, e: "Uma discussão, por si só, não é um crime nem se relaciona ao feminicídio, que exige a morte da vítima motivada por razões de gênero." },
+      { t: "Um acidente doméstico", c: false, e: "O feminicídio é um crime doloso, ou seja, intencional — não se trata de um acidente." },
+      { t: "Homicídio por motivos de ódio contra apenas mulheres negras", c: false, e: "O feminicídio pode atingir mulheres de qualquer raça ou cor. Embora mulheres negras sejam a maioria das vítimas no Brasil, a definição do crime não se restringe a elas." }
+    ]
+  },
+  {
+    q: "Qual destas é uma forma de violência contra a mulher?",
+    opts: [
+      { t: "Violência física", c: true, e: "A violência física é uma das formas reconhecidas de violência contra a mulher, ao lado da psicológica, sexual, patrimonial e moral." },
+      { t: "Apenas violência verbal entre amigos", c: false, e: "Essa alternativa restringe demais o conceito: a violência contra a mulher vai muito além de discussões entre amigos e engloba diversas formas de agressão." },
+      { t: "Somente acidentes domésticos", c: false, e: "Acidentes não são atos de violência; a violência pressupõe uma ação intencional de agressão ou controle sobre a vítima." },
+      { t: "Nenhuma das alternativas", c: false, e: "Existe sim uma alternativa correta entre as opções: a violência física é uma forma reconhecida de violência contra a mulher." }
+    ]
+  },
+  {
+    q: "Qual número deve ser discado para denunciar e receber orientação sobre violência contra a mulher?",
+    opts: [
+      { t: "180 (Central de Atendimento à Mulher)", c: true, e: "O Disque 180 é o canal nacional, gratuito e disponível 24h, dedicado a denúncias e orientação sobre violência contra a mulher. Em situações de emergência, o indicado é ligar para o 190 (Polícia Militar)." },
+      { t: "181 (Para denúncias e investigações criminais)", c: false, e: "O 181 é usado para denúncias e investigações criminais em geral, não é o canal específico de atendimento à mulher." },
+      { t: "192 (Serviço de Atendimento Móvel de Urgência - SAMU)", c: false, e: "O SAMU atende emergências de saúde; não é o canal de denúncia de violência contra a mulher." },
+      { t: "193 (Corpo de Bombeiros)", c: false, e: "O Corpo de Bombeiros atua em emergências como incêndios e resgates, não é o canal de atendimento à mulher." }
+    ]
+  },
+  {
+    q: "Por que é importante compreender a importância do feminicídio e buscar informações sobre ele?",
+    opts: [
+      { t: "Pois ele é um problema apenas da vítima e de sua família", c: false, e: "O feminicídio não é um problema restrito à vítima e à sua família — é uma questão social que exige resposta de toda a sociedade." },
+      { t: "Para que a sociedade não esteja apta e aberta a combater o feminicídio", c: false, e: "Pelo contrário: buscar informação serve exatamente para preparar e mobilizar a sociedade a combater o feminicídio, não para afastá-la desse combate." },
+      { t: "Para que apenas algumas pessoas se conscientizem sobre o problema mundial que o feminicídio acarreta", c: false, e: "A conscientização não deve ficar restrita a poucas pessoas; o problema exige entendimento amplo, de toda a sociedade." },
+      { t: "Para conscientizar e ensinar a importância sobre a necessidade de entender o feminicídio, e perceber que ele não ocorre apenas no momento do assassinato, mas que é antecedido por outras formas de violência", c: true, e: "Compreender o feminicídio ajuda a perceber que ele raramente é um ato isolado — costuma ser precedido por ameaças, agressões físicas ou psicológicas e outras formas de violência — e isso é essencial para preveni-lo." }
+    ]
+  },
+  {
+    q: "O caso de Eloá Cristina Pimentel, citado como exemplo de feminicídio, ficou marcado por quê?",
+    opts: [
+      { t: "Pela adolescente, de 15 anos, ter sido mantida refém por mais de 100 horas pelo ex-namorado, que não aceitava o fim do relacionamento, sendo morta durante a invasão policial", c: true, e: "Em outubro de 2008, em Santo André (SP), Eloá foi mantida em cárcere privado por mais de 100 horas pelo ex-namorado Lindemberg Alves e morreu baleada por ele no momento em que a polícia invadiu o apartamento." },
+      { t: "Por ter sido um crime cometido por um desconhecido da vítima, sem qualquer vínculo afetivo anterior", c: false, e: "O autor do crime era o ex-namorado de Eloá, com quem ela havia tido um relacionamento — não um desconhecido." },
+      { t: "Por ter ocorrido antes de qualquer legislação brasileira sobre violência doméstica", c: false, e: "O caso aconteceu em 2008, dois anos depois da Lei Maria da Penha (2006) entrar em vigor, o que mostra que a existência de uma lei, isoladamente, não é suficiente para impedir um crime desse tipo." },
+      { t: "Por ter sido resolvido rapidamente, sem repercussão na mídia", c: false, e: "O caso teve ampla cobertura da imprensa, ao vivo, durante os mais de 100 horas de cárcere, e gerou debates até hoje sobre ética jornalística e relacionamentos abusivos." }
+    ]
+  },
+  {
+    q: "O feminicídio é descrito como \"a ponta de um iceberg\". O que sustentaria essa parte submersa do problema?",
+    opts: [
+      { t: "Pequenas violências do dia a dia e o machismo estrutural presentes na sociedade", c: true, e: "A ideia é que o feminicídio é o desfecho mais extremo de um problema alimentado continuamente por pequenas violências cotidianas e por um machismo estrutural, muitas vezes naturalizado." },
+      { t: "Exclusivamente falhas no sistema judiciário", c: false, e: "Falhas institucionais podem agravar o problema, mas a base do fenômeno está nas violências cotidianas e no machismo estrutural, não apenas no funcionamento da Justiça." },
+      { t: "Apenas a falta de cobertura da imprensa sobre o tema", c: false, e: "A cobertura da imprensa influencia a percepção pública, mas não é ela que sustenta a base do problema — isso vem de comportamentos e desigualdades presentes no cotidiano." },
+      { t: "Fatores exclusivamente econômicos, sem relação com desigualdade de gênero", c: false, e: "O problema está diretamente ligado à desigualdade de gênero e ao machismo estrutural, não apenas a fatores econômicos isolados." }
+    ]
+  }
+];
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+let order = shuffle(QUESTIONS.map((_,i)=>i));
+let current = 0;
+let score = 0;
+let answered = false;
+
+const questionText = document.getElementById('questionText');
+const optionsArea = document.getElementById('optionsArea');
+const qCounter = document.getElementById('qCounter');
+const scoreVal = document.getElementById('scoreVal');
+const trackFill = document.getElementById('trackFill');
+const nextBtn = document.getElementById('nextBtn');
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+
+function renderQuestion(){
+  answered = false;
+  nextBtn.style.display = 'none';
+  const qIndex = order[current];
+  const data = QUESTIONS[qIndex];
+  const opts = shuffle(data.opts.map((o,i)=>({...o, origIndex:i})));
+
+  qCounter.textContent = `Pergunta ${current+1} de ${QUESTIONS.length}`;
+  scoreVal.textContent = score;
+  trackFill.style.width = `${((current)/QUESTIONS.length)*100 + (100/QUESTIONS.length)}%`;
+  questionText.textContent = data.q;
+  optionsArea.innerHTML = '';
+
+  opts.forEach((opt) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.type = 'button';
+    btn.textContent = opt.t;
+    btn.addEventListener('click', () => handleAnswer(opt, opts, btn));
+    optionsArea.appendChild(btn);
+  });
+}
+
+function handleAnswer(opt, allOpts, clickedBtn){
+  if(answered) return;
+  answered = true;
+
+  const buttons = Array.from(optionsArea.children);
+
+  buttons.forEach((btn, idx) => {
+    btn.disabled = true;
+    const optData = allOpts[idx];
+    if(optData.c){
+      btn.classList.add('correct');
+    }
+  });
+
+  if(opt.c){
+    score += 1;
+    scoreVal.textContent = score;
+    const ex = document.createElement('div');
+    ex.className = 'explain correct';
+    ex.innerHTML = `<strong>Certo.</strong>${opt.e}`;
+    clickedBtn.insertAdjacentElement('afterend', ex);
+  } else {
+    clickedBtn.classList.remove('correct');
+    clickedBtn.classList.add('wrong');
+    const ex = document.createElement('div');
+    ex.className = 'explain wrong';
+    ex.innerHTML = `<strong>Não é essa.</strong>${opt.e}`;
+    clickedBtn.insertAdjacentElement('afterend', ex);
+
+    const correctOpt = allOpts.find(o => o.c);
+    const correctBtn = buttons[allOpts.indexOf(correctOpt)];
+    const exC = document.createElement('div');
+    exC.className = 'explain correct';
+    exC.innerHTML = `<strong>Resposta certa.</strong>${correctOpt.e}`;
+    correctBtn.insertAdjacentElement('afterend', exC);
+  }
+
+  nextBtn.style.display = 'inline-block';
+  nextBtn.textContent = current === QUESTIONS.length - 1 ? 'Ver resultado' : 'Próxima pergunta';
+}
+
+nextBtn.addEventListener('click', () => {
+  if(!answered) return;
+  current += 1;
+  if(current >= QUESTIONS.length){
+    showResult();
+  } else {
+    renderQuestion();
+  }
+});
+
+function showResult(){
+  quizArea.style.display = 'none';
+  resultArea.style.display = 'block';
+  document.getElementById('finalScore').textContent = `${score}/${QUESTIONS.length}`;
+  let msg;
+  if(score === QUESTIONS.length){
+    msg = "Você domina bem o tema — parabéns por se informar sobre um problema tão sério.";
+  } else if(score >= QUESTIONS.length*0.6){
+    msg = "Um bom resultado. Vale revisar os pontos que ficaram confusos para entender melhor o problema.";
+  } else {
+    msg = "Esse é um tema em que vale a pena se aprofundar mais — refazer o quiz é um bom próximo passo.";
+  }
+  document.getElementById('finalMsg').textContent = msg;
+}
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  order = shuffle(QUESTIONS.map((_,i)=>i));
+  current = 0;
+  score = 0;
+  quizArea.style.display = 'block';
+  resultArea.style.display = 'none';
+  renderQuestion();
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
